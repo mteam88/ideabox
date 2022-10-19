@@ -1,0 +1,22 @@
+<!-- webpage that shows a list of ideas from a render paremeter in flask
+the parameter is called ideas -->
+<!doctype html>
+<html>
+
+<head>
+    <title>Ideas:</title>
+</head>
+
+<body>
+    <h1>Ideas:</h1>
+    <!-- form that will make a post request to add an idea -->
+    <form action="/" method="post">
+        <!-- resizable text area-->
+        <textarea style="resize:both;" name="ideatext" rows="5" cols="40"></textarea>
+        <input type="submit" value="Add">
+
+        {% for idea in ideas %}
+            <p title="{{ idea['idea_time'] }}">{{ idea['idea_text'] }}</p>
+        {% endfor %}
+
+</html>

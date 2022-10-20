@@ -4,19 +4,58 @@ the parameter is called ideas -->
 <html>
 
 <head>
-    <title>Ideas:</title>
+    <title>Ideabox</title>
 </head>
 
 <body>
     <h1>Ideas:</h1>
+    <a href="/about">About</a>
     <!-- form that will make a post request to add an idea -->
     <form action="/" method="post">
         <!-- resizable text area-->
-        <textarea style="resize:both;" name="ideatext" rows="5" cols="40"></textarea>
-        <input type="submit" value="Add">
-
+        <textarea style="resize:both;" name="ideatext"></textarea>
+        <!-- submit button
+        the button is blue
+        the button is large -->
+        <input type="submit" value="Add Idea" style="background-color:blue; font-size: 20px;">
         {% for idea in ideas %}
-            <p title="{{ idea['idea_time'] }}">{{ idea['idea_text'] }}</p>
+            <!-- show the idea text at a random top and left position -->
+            <div class="random_position" style="position:absolute; background-color: aqua;">
+                {{idea['idea_text']}}
+            </div>
         {% endfor %}
 
+    </form>
+    <script>
+        // get all the divs with the class random_position and set their top and left position to a random value that is on the screen
+        // make sure the div is not covering the form
+        var divs = document.getElementsByClassName("random_position");
+        for (var i = 0; i < divs.length; i++) {
+            divs[i].style.top = Math.floor(Math.random() * (window.innerHeight-150)+150) + 'px';
+            divs[i].style.left = Math.floor(Math.random() * (window.innerWidth)) + 'px';
+        }
+
+        changeBackground();
+
+        // this will make the text area resize to fit the text
+        var textarea = document.querySelector('textarea');
+        textarea.addEventListener('keydown', autosize);
+        function autosize() {
+            var el = this;
+            setTimeout(function () {
+                el.style.cssText = 'height:auto; padding:0';
+                el.style.cssText = 'height:' + el.scrollHeight + 'px';
+            }, 0);
+        }
+        // change the background color of the page to a gradient between two random colors every 5 seconds
+        // run the function once to start
+
+        function changeBackground() {
+            var color1 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            var color2 = '#' + Math.floor(Math.random() * 16777215).toString(16);
+            document.body.style.background = 'linear-gradient(to right, ' + color1 + ', ' + color2 + ')';
+        }
+        setInterval(changeBackground, 5000);
+    </script>
+</body>
 </html>

@@ -36,20 +36,23 @@ def index():
         with shelve.open(DATABASE_PATH, writeback=True) as shelf:
             ideas = shelf["ideas"]
         return render_template('index.html', ideas=ideas)
+        
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 def delete_old_ideas():
     "delete ideas older than 30 days"
     with shelve.open(DATABASE_PATH, writeback=True) as shelf:
         ideas = shelf["ideas"]
         for idea in ideas:
-            if (datetime.now() - idea["idea_time"]).seconds > 30:
-                print(f"deleting idea: {idea['idea_text']}")
+            if (datetime.now() - idea["idea_time"]).days > 30:
+                print(f"idea deleted: {idea['idea_text']}")
                 ideas.remove(idea)
         shelf["ideas"] = ideas
 
 if __name__ == "__main__":
-    # run the delete_old_ideas function every 30 seconds using APScheduler
     deleter = BackgroundScheduler()
-    deleter.add_job(func=delete_old_ideas, trigger="interval", seconds=6)
+    deleter.add_job(func=delete_old_ideas, trigger="interval", seconds=800)
     deleter.start()
     app.run(debug=True)
